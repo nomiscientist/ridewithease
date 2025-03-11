@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
 
 const DriverProfileScreen = ({ navigation, route }) => {
   // In a real app, this would come from API
   const driverInfo = {
     name: 'John Smith',
-    photo: require('../assets/driver-photo.png'),
     rating: 4.8,
     totalRides: 1250,
     yearsActive: 2,
@@ -40,13 +40,10 @@ const DriverProfileScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.content}>
         <View style={styles.header}>
-          <Image source={driverInfo.photo} style={styles.photo} />
+          <Image source={getImageSource(ASSETS.driver)} style={styles.driverIcon} />
           <Text style={styles.name}>{driverInfo.name}</Text>
           <View style={styles.ratingContainer}>
-            <Image
-              source={require('../assets/star-icon.png')}
-              style={styles.starIcon}
-            />
+            <Image source={getImageSource(ASSETS.star)} style={styles.starIcon} />
             <Text style={styles.rating}>{driverInfo.rating}</Text>
           </View>
         </View>
@@ -66,9 +63,12 @@ const DriverProfileScreen = ({ navigation, route }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Vehicle Information</Text>
           <View style={styles.vehicleInfo}>
-            <Text style={styles.vehicleText}>
-              {driverInfo.vehicle.year} {driverInfo.vehicle.make} {driverInfo.vehicle.model}
-            </Text>
+            <View style={styles.vehicleRow}>
+              <Image source={getImageSource(ASSETS.car)} style={styles.vehicleIcon} />
+              <Text style={styles.vehicleText}>
+                {driverInfo.vehicle.year} {driverInfo.vehicle.make} {driverInfo.vehicle.model}
+              </Text>
+            </View>
             <Text style={styles.vehicleText}>Color: {driverInfo.vehicle.color}</Text>
             <Text style={styles.vehicleText}>Plate: {driverInfo.vehicle.plateNumber}</Text>
           </View>
@@ -92,11 +92,7 @@ const DriverProfileScreen = ({ navigation, route }) => {
               <View style={styles.reviewHeader}>
                 <View style={styles.reviewRating}>
                   {[...Array(review.rating)].map((_, i) => (
-                    <Image
-                      key={i}
-                      source={require('../assets/star-icon.png')}
-                      style={styles.reviewStarIcon}
-                    />
+                    <Image key={i} source={getImageSource(ASSETS.star)} style={styles.starIcon} />
                   ))}
                 </View>
                 <Text style={styles.reviewDate}>{review.date}</Text>
@@ -111,7 +107,8 @@ const DriverProfileScreen = ({ navigation, route }) => {
           style={styles.reportButton}
           onPress={() => {}}
         >
-          <Text style={styles.reportButtonText}>Report an Issue</Text>
+          <Image source={getImageSource(ASSETS.report)} style={styles.reportIcon} />
+          <Text style={styles.reportButtonText}> Report an Issue</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -132,10 +129,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#EEE'
   },
-  photo: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+  driverIcon: {
+    width: 80,
+    height: 80,
     marginBottom: 15
   },
   name: {
@@ -151,7 +147,8 @@ const styles = StyleSheet.create({
   starIcon: {
     width: 20,
     height: 20,
-    marginRight: 5
+    marginRight: 5,
+    tintColor: '#FFD700'
   },
   rating: {
     fontSize: 18,
@@ -199,6 +196,17 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10
   },
+  vehicleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5
+  },
+  vehicleIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+    tintColor: '#4A90E2'
+  },
   vehicleText: {
     fontSize: 16,
     color: '#666',
@@ -235,11 +243,6 @@ const styles = StyleSheet.create({
   reviewRating: {
     flexDirection: 'row'
   },
-  reviewStarIcon: {
-    width: 16,
-    height: 16,
-    marginRight: 2
-  },
   reviewDate: {
     fontSize: 12,
     color: '#999'
@@ -263,6 +266,12 @@ const styles = StyleSheet.create({
     borderColor: '#FF4444',
     borderRadius: 25,
     alignItems: 'center'
+  },
+  reportIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    tintColor: '#FF4444'
   },
   reportButtonText: {
     color: '#FF4444',

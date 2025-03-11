@@ -1,86 +1,59 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
 
-const NotificationsScreen = () => {
+const NotificationsScreen = ({ navigation }) => {
   const notifications = [
     {
-      id: '1',
-      type: 'ride_update',
+      id: 1,
+      type: 'ride',
       title: 'Driver Arrived',
-      message: 'Your driver has arrived at the pickup location.',
+      message: 'Your driver John has arrived at the pickup location.',
       time: '2 mins ago',
-      read: false
+      icon: ASSETS.car
     },
     {
-      id: '2',
-      type: 'promotion',
-      title: 'Weekend Special',
-      message: 'Get 20% off on your rides this weekend!',
+      id: 2,
+      type: 'promo',
+      title: 'Weekend Offer',
+      message: 'Get 20% off on your weekend rides!',
       time: '1 hour ago',
-      read: true
-    },
-    {
-      id: '3',
-      type: 'system',
-      title: 'App Update Available',
-      message: 'Update your app to get the latest features and improvements.',
-      time: '1 day ago',
-      read: true
+      icon: ASSETS.promotion
     }
   ];
 
-  const getNotificationIcon = (type) => {
-    switch (type) {
-      case 'ride_update':
-        return require('../assets/car-icon.png');
-      case 'promotion':
-        return require('../assets/promotion-icon.png');
-      case 'system':
-        return require('../assets/system-icon.png');
-      default:
-        return require('../assets/notification-icon.png');
-    }
-  };
-
-  const renderNotification = ({ item }) => (
-    <TouchableOpacity 
-      style={[styles.notificationItem, !item.read && styles.unreadItem]}
-      onPress={() => {}}
-    >
-      <View style={styles.notificationContent}>
-        <Image 
-          source={getNotificationIcon(item.type)}
-          style={styles.notificationIcon}
-        />
-        <View style={styles.notificationText}>
-          <Text style={styles.notificationTitle}>{item.title}</Text>
-          <Text style={styles.notificationMessage}>{item.message}</Text>
-          <Text style={styles.notificationTime}>{item.time}</Text>
-        </View>
-        {!item.read && <View style={styles.unreadDot} />}
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={notifications}
-        renderItem={renderNotification}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Image
-              source={require('../assets/empty-notifications.png')}
-              style={styles.emptyIcon}
-            />
-            <Text style={styles.emptyText}>No notifications yet</Text>
-          </View>
-        }
-      />
+      {notifications.length > 0 ? (
+        <ScrollView style={styles.content}>
+          {notifications.map(notification => (
+            <TouchableOpacity
+              key={notification.id}
+              style={styles.notificationCard}
+              onPress={() => {}}
+            >
+              <Image 
+                source={getImageSource(notification.icon)} 
+                style={styles.notificationIcon} 
+              />
+              <View style={styles.notificationContent}>
+                <Text style={styles.notificationTitle}>{notification.title}</Text>
+                <Text style={styles.notificationMessage}>{notification.message}</Text>
+                <Text style={styles.notificationTime}>{notification.time}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Image 
+            source={getImageSource(ASSETS.notification)} 
+            style={styles.emptyIcon} 
+          />
+          <Text style={styles.emptyText}>No notifications yet</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -90,25 +63,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
-  listContainer: {
-    flexGrow: 1
+  content: {
+    flex: 1
   },
-  notificationItem: {
-    padding: 15
-  },
-  unreadItem: {
-    backgroundColor: '#F5F8FF'
-  },
-  notificationContent: {
+  notificationCard: {
     flexDirection: 'row',
-    alignItems: 'center'
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE'
   },
   notificationIcon: {
     width: 40,
     height: 40,
-    marginRight: 15
+    marginRight: 15,
+    tintColor: '#4A90E2'
   },
-  notificationText: {
+  notificationContent: {
     flex: 1
   },
   notificationTitle: {
@@ -126,17 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#999'
   },
-  unreadDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#4A90E2',
-    marginLeft: 10
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#EEE'
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -144,8 +103,8 @@ const styles = StyleSheet.create({
     padding: 20
   },
   emptyIcon: {
-    width: 100,
-    height: 100,
+    width: 64,
+    height: 64,
     marginBottom: 20,
     tintColor: '#CCC'
   },

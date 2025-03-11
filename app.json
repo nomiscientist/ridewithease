@@ -4,10 +4,10 @@
     "slug": "ridewithease",
     "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "https://cdn-icons-png.flaticon.com/512/3843/3843517.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "https://cdn-icons-png.flaticon.com/512/3843/3843517.png",
       "resizeMode": "contain",
       "backgroundColor": "#4A90E2"
     },
@@ -16,11 +16,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ridewithease.app"
+      "bundleIdentifier": "com.ridewithease.app",
+      "icon": "https://cdn-icons-png.flaticon.com/512/3843/3843517.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "https://cdn-icons-png.flaticon.com/512/3843/3843517.png",
         "backgroundColor": "#4A90E2"
       },
       "package": "com.ridewithease.app"

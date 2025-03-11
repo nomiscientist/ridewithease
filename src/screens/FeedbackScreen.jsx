@@ -1,77 +1,99 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
 
 const FeedbackScreen = ({ navigation, route }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
-  const handleSubmit = () => {
-    // TODO: Implement feedback submission logic
-    navigation.goBack();
+  const rideDetails = {
+    driver: 'John Smith',
+    pickup: 'Student Center',
+    dropoff: 'Downtown Campus',
+    date: 'Today, 3:30 PM'
   };
 
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <TouchableOpacity
-          key={i}
-          onPress={() => setRating(i)}
-          style={styles.starContainer}
-        >
-          <Image
-            source={require('../assets/star-icon.png')}
-            style={[styles.star, i <= rating && styles.starSelected]}
-          />
-        </TouchableOpacity>
-      );
-    }
-    return stars;
+  const handleSubmit = () => {
+    // TODO: Submit feedback to backend
+    navigation.goBack();
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.driverInfo}>
-          <Image
-            source={require('../assets/driver-photo.png')}
-            style={styles.driverPhoto}
+        <View style={styles.rideCard}>
+          <Text style={styles.rideTitle}>Rate your ride with</Text>
+          <View style={styles.driverInfo}>
+            <Image source={getImageSource(ASSETS.driver)} style={styles.driverIcon} />
+            <Text style={styles.driverName}>{rideDetails.driver}</Text>
+          </View>
+          <View style={styles.routeInfo}>
+            <View style={styles.locationContainer}>
+              <Image source={getImageSource(ASSETS.location)} style={styles.locationIcon} />
+              <Text style={styles.locationText}>{rideDetails.pickup}</Text>
+              <Image source={getImageSource(ASSETS.arrowRight)} style={styles.arrowIcon} />
+              <Text style={styles.locationText}>{rideDetails.dropoff}</Text>
+            </View>
+            <View style={styles.timeContainer}>
+              <Image source={getImageSource(ASSETS.clock)} style={styles.timeIcon} />
+              <Text style={styles.timeText}>{rideDetails.date}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.ratingContainer}>
+          <Text style={styles.ratingTitle}>How was your ride?</Text>
+          <View style={styles.starsContainer}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <TouchableOpacity
+                key={star}
+                onPress={() => setRating(star)}
+              >
+                <Image 
+                  source={getImageSource(ASSETS.star)} 
+                  style={[
+                    styles.starIcon,
+                    star <= rating ? styles.starSelected : styles.starUnselected
+                  ]} 
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.commentSection}>
+          <Text style={styles.commentTitle}>Additional Comments</Text>
+          <TextInput
+            style={styles.commentInput}
+            multiline
+            numberOfLines={4}
+            placeholder="Tell us about your experience..."
+            value={comment}
+            onChangeText={setComment}
           />
-          <Text style={styles.driverName}>John Smith</Text>
-          <Text style={styles.tripInfo}>Toyota Camry - ABC 123</Text>
         </View>
-
-        <Text style={styles.ratingTitle}>How was your ride?</Text>
-        <View style={styles.starsContainer}>
-          {renderStars()}
-        </View>
-
-        <Text style={styles.commentTitle}>Additional Comments</Text>
-        <TextInput
-          style={styles.commentInput}
-          placeholder="Tell us about your experience"
-          value={comment}
-          onChangeText={setComment}
-          multiline
-          numberOfLines={4}
-          textAlignVertical="top"
-        />
 
         <TouchableOpacity 
-          style={[styles.submitButton, (!rating || !comment) && styles.submitButtonDisabled]}
+          style={[
+            styles.submitButton,
+            rating === 0 && styles.submitButtonDisabled
+          ]}
           onPress={handleSubmit}
-          disabled={!rating || !comment}
+          disabled={rating === 0}
         >
           <Text style={styles.submitButtonText}>Submit Feedback</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.skipButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.skipButtonText}>Skip</Text>
-        </TouchableOpacity>
+        {rating < 3 && rating > 0 && (
+          <TouchableOpacity 
+            style={styles.reportButton}
+            onPress={() => navigation.navigate('ReportIssue')}
+          >
+            <Image source={getImageSource(ASSETS.report)} style={styles.reportIcon} />
+            <Text style={styles.reportButtonText}>Report an Issue</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -164,6 +186,51 @@ const styles = StyleSheet.create({
   skipButtonText: {
     color: '#666',
     fontSize: 14
+  },
+  driverEmoji: {
+    fontSize: 48,
+    marginBottom: 10
+  },
+  starIcon: {
+    width: 32,
+    height: 32,
+    marginHorizontal: 5
+  },
+  starSelected: {
+    tintColor: '#FFD700'
+  },
+  starUnselected: {
+    tintColor: '#DDD'
+  },
+  reportIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    tintColor: '#FF4444'
+  },
+  driverIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10
+  },
+  locationIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 5,
+    tintColor: '#666'
+  },
+  arrowIcon: {
+    width: 16,
+    height: 16,
+    marginHorizontal: 5,
+    tintColor: '#666'
+  },
+  timeIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 5,
+    tintColor: '#666'
   }
 });
 

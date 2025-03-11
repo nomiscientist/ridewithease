@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import Constants from 'expo-constants';
+import * as SplashScreen from 'expo-splash-screen';
+import { Asset } from 'expo-asset';
+import { ASSETS } from './constants/assets';
 
 // Import screens
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -21,6 +23,28 @@ import FeedbackScreen from './screens/FeedbackScreen';
 const Stack = createStackNavigator();
 
 const App = () => {
+  useEffect(() => {
+    async function prepareApp() {
+      try {
+        // Keep splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+
+        // Preload all images
+        const imageAssets = Object.values(ASSETS).map(imageUri => {
+          return Asset.fromURI(imageUri).downloadAsync();
+        });
+
+        await Promise.all(imageAssets);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    prepareApp();
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

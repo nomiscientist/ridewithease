@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
+import LoadingImage from '../components/LoadingImage';
 
 const DashboardScreen = ({ navigation }) => {
   const upcomingRide = {
@@ -20,9 +22,10 @@ const DashboardScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
           <View style={styles.notificationBadge}>
-            <Image
-              source={require('../assets/notification-icon.png')}
+            <LoadingImage 
+              source={getImageSource(ASSETS.notification)} 
               style={styles.notificationIcon}
+              tintColor="#fff"
             />
             <View style={styles.badge}>
               <Text style={styles.badgeText}>2</Text>
@@ -42,9 +45,10 @@ const DashboardScreen = ({ navigation }) => {
               <Text style={styles.rideTime}>{upcomingRide.pickupTime}</Text>
               <View style={styles.locationContainer}>
                 <Text style={styles.location}>{upcomingRide.pickupLocation}</Text>
-                <Image
-                  source={require('../assets/arrow-right.png')}
+                <LoadingImage 
+                  source={getImageSource(ASSETS.arrowRight)} 
                   style={styles.arrow}
+                  tintColor="#666"
                 />
                 <Text style={styles.location}>{upcomingRide.dropoffLocation}</Text>
               </View>
@@ -64,9 +68,10 @@ const DashboardScreen = ({ navigation }) => {
             style={styles.actionButton}
             onPress={() => {}}
           >
-            <Image
-              source={require('../assets/schedule-icon.png')}
+            <LoadingImage 
+              source={getImageSource(ASSETS.schedule)} 
               style={styles.actionIcon}
+              tintColor="#4A90E2"
             />
             <Text style={styles.actionText}>Schedule Ride</Text>
           </TouchableOpacity>
@@ -75,9 +80,10 @@ const DashboardScreen = ({ navigation }) => {
             style={styles.actionButton}
             onPress={() => navigation.navigate('RideHistory')}
           >
-            <Image
-              source={require('../assets/history-icon.png')}
+            <LoadingImage 
+              source={getImageSource(ASSETS.history)} 
               style={styles.actionIcon}
+              tintColor="#4A90E2"
             />
             <Text style={styles.actionText}>Ride History</Text>
           </TouchableOpacity>
@@ -86,9 +92,10 @@ const DashboardScreen = ({ navigation }) => {
             style={styles.actionButton}
             onPress={() => navigation.navigate('Support')}
           >
-            <Image
-              source={require('../assets/support-icon.png')}
+            <LoadingImage 
+              source={getImageSource(ASSETS.support)} 
               style={styles.actionIcon}
+              tintColor="#4A90E2"
             />
             <Text style={styles.actionText}>Support</Text>
           </TouchableOpacity>
@@ -187,7 +194,8 @@ const styles = StyleSheet.create({
   arrow: {
     width: 16,
     height: 16,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    tintColor: '#666'
   },
   driverInfo: {
     fontSize: 12,
@@ -215,9 +223,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   actionIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 5
+    width: 32,
+    height: 32,
+    marginBottom: 5,
+    tintColor: '#4A90E2'
   },
   actionText: {
     fontSize: 12,

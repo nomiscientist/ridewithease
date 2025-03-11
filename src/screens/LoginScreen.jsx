@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
 
 const LoginScreen = ({ navigation }) => {
   const [studentId, setStudentId] = useState('');
@@ -23,11 +24,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.content}
       >
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <Image source={getImageSource(ASSETS.car)} style={styles.logoIcon} />
           <Text style={styles.welcomeText}>Welcome Back!</Text>
           <Text style={styles.subtitle}>Sign in with your student credentials</Text>
         </View>
@@ -99,10 +96,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 40
   },
-  logo: {
+  logoIcon: {
     width: 120,
     height: 120,
-    marginBottom: 20
+    marginBottom: 20,
+    tintColor: '#4A90E2'
   },
   welcomeText: {
     fontSize: 28,

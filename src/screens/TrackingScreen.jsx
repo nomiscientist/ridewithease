@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { ASSETS, getImageSource } from '../constants/assets';
 
 const { width, height } = Dimensions.get('window');
 
@@ -36,55 +37,41 @@ const TrackingScreen = ({ navigation, route }) => {
           coordinate={driverLocation}
           title="Driver Location"
         >
-          <Image
-            source={require('../assets/car-marker.png')}
-            style={styles.markerImage}
+          <Image 
+            source={getImageSource(ASSETS.car)}
+            style={styles.markerIcon}
           />
         </Marker>
       </MapView>
 
       <View style={styles.statusCard}>
         <View style={styles.statusHeader}>
+          <Image source={getImageSource(ASSETS.car)} style={styles.statusIcon} />
           <Text style={styles.statusText}>{rideStatus.status}</Text>
           <View style={styles.timeDistance}>
             <View style={styles.infoItem}>
-              <Image
-                source={require('../assets/clock-icon.png')}
-                style={styles.infoIcon}
-              />
+              <Image source={getImageSource(ASSETS.clock)} style={styles.infoIcon} />
               <Text style={styles.infoText}>{rideStatus.estimatedTime}</Text>
             </View>
             <View style={styles.infoItem}>
-              <Image
-                source={require('../assets/distance-icon.png')}
-                style={styles.infoIcon}
-              />
+              <Image source={getImageSource(ASSETS.distance)} style={styles.infoIcon} />
               <Text style={styles.infoText}>{rideStatus.distance}</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.driverInfo}>
-          <Image
-            source={require('../assets/driver-photo.png')}
-            style={styles.driverPhoto}
-          />
+          <Image source={getImageSource(ASSETS.driver)} style={styles.driverIcon} />
           <View style={styles.driverDetails}>
             <Text style={styles.driverName}>John Smith</Text>
             <Text style={styles.vehicleInfo}>Toyota Camry - ABC 123</Text>
           </View>
           <View style={styles.actions}>
             <TouchableOpacity style={styles.actionButton}>
-              <Image
-                source={require('../assets/message-icon.png')}
-                style={styles.actionIcon}
-              />
+              <Image source={getImageSource(ASSETS.message)} style={styles.actionIcon} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.actionButton}>
-              <Image
-                source={require('../assets/phone-icon.png')}
-                style={styles.actionIcon}
-              />
+              <Image source={getImageSource(ASSETS.phone)} style={styles.actionIcon} />
             </TouchableOpacity>
           </View>
         </View>
@@ -108,10 +95,10 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
   },
-  markerImage: {
+  markerIcon: {
     width: 40,
     height: 40,
-    resizeMode: 'contain'
+    tintColor: '#4A90E2'
   },
   statusCard: {
     position: 'absolute',
@@ -131,6 +118,12 @@ const styles = StyleSheet.create({
   statusHeader: {
     marginBottom: 20
   },
+  statusIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+    tintColor: '#4A90E2'
+  },
   statusText: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -147,8 +140,8 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   infoIcon: {
-    width: 16,
-    height: 16,
+    width: 20,
+    height: 20,
     marginRight: 5,
     tintColor: '#666'
   },
@@ -164,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20
   },
-  driverPhoto: {
+  driverIcon: {
     width: 50,
     height: 50,
     borderRadius: 25,

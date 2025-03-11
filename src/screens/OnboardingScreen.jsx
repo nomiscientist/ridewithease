@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ASSETS, getImageSource } from '../constants/assets';
 
-const { width, height } = Dimensions.get('window');
-
-const onboardingData = [
-  {
-    title: 'Welcome to Ease',
-    description: 'Your trusted student ride-sharing platform',
-    image: require('../assets/onboarding-1.png')
-  },
-  {
-    title: 'Safe & Reliable',
-    description: 'Professional drivers and real-time tracking for your peace of mind',
-    image: require('../assets/onboarding-2.png')
-  },
-  {
-    title: 'Easy Scheduling',
-    description: 'Book your rides in advance or on-demand',
-    image: require('../assets/onboarding-3.png')
-  }
-];
+const { width } = Dimensions.get('window');
 
 const OnboardingScreen = ({ navigation }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
+  const slides = [
+    {
+      icon: ASSETS.car,
+      title: 'Easy Campus Transit',
+      description: 'Get around campus safely and efficiently with our dedicated ride service.'
+    },
+    {
+      icon: ASSETS.schedule,
+      title: 'Schedule Rides',
+      description: 'Plan ahead by scheduling rides to and from your classes.'
+    },
+    {
+      icon: ASSETS.location,
+      title: 'Real-time Tracking',
+      description: 'Track your ride in real-time and share your journey with friends.'
+    }
+  ];
+
   const handleNext = () => {
-    if (currentPage < onboardingData.length - 1) {
+    if (currentPage < slides.length - 1) {
       setCurrentPage(currentPage + 1);
     } else {
       navigation.navigate('Login');
@@ -40,33 +41,52 @@ const OnboardingScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Image 
-          source={onboardingData[currentPage].image}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.title}>{onboardingData[currentPage].title}</Text>
-        <Text style={styles.description}>{onboardingData[currentPage].description}</Text>
-      </View>
-
-      <View style={styles.pagination}>
-        {onboardingData.map((_, index) => (
-          <View
-            key={index}
-            style={[styles.dot, currentPage === index && styles.activeDot]}
+        <View style={styles.slideContainer}>
+          <Image 
+            source={getImageSource(slides[currentPage].icon)} 
+            style={styles.slideIcon} 
           />
-        ))}
-      </View>
+          <Text style={styles.title}>{slides[currentPage].title}</Text>
+          <Text style={styles.description}>{slides[currentPage].description}</Text>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-          <Text style={styles.nextText}>
-            {currentPage === onboardingData.length - 1 ? 'Get Started' : 'Next'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.paginationContainer}>
+          {slides.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.paginationDot,
+                index === currentPage && styles.paginationDotActive
+              ]}
+            />
+          ))}
+        </View>
+
+        <View style={styles.buttonContainer}>
+          {currentPage < slides.length - 1 ? (
+            <>
+              <TouchableOpacity
+                style={styles.skipButton}
+                onPress={handleSkip}
+              >
+                <Text style={styles.skipButtonText}>Skip</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.nextButton}
+                onPress={handleNext}
+              >
+                <Text style={styles.nextButtonText}>Next</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity
+              style={[styles.nextButton, styles.getStartedButton]}
+              onPress={handleNext}
+            >
+              <Text style={styles.nextButtonText}>Get Started</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -83,10 +103,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20
   },
-  image: {
-    width: width * 0.8,
-    height: height * 0.4,
+  slideContainer: {
+    alignItems: 'center',
     marginBottom: 40
+  },
+  slideIcon: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    tintColor: '#4A90E2'
   },
   title: {
     fontSize: 28,
@@ -102,33 +127,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     lineHeight: 24
   },
-  pagination: {
+  paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 40
   },
-  dot: {
+  paginationDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#ccc',
+    backgroundColor: '#CCC',
     marginHorizontal: 4
   },
-  activeDot: {
+  paginationDotActive: {
     backgroundColor: '#4A90E2',
     width: 20
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingBottom: 20
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 20
   },
   skipButton: {
     padding: 15
   },
-  skipText: {
+  skipButtonText: {
     color: '#666',
     fontSize: 16
   },
@@ -138,7 +164,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25
   },
-  nextText: {
+  getStartedButton: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  nextButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold'
